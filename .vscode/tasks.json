@@ -1,0 +1,41 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "msvc build",
+        "type": "shell",
+        "command": "cl.exe",
+        "args": [
+            // Compiler options
+            "/EHsc",
+            "/Zi",
+            "/I", "${env:SDLPATH}/include",
+            "/I", "${env:SDLIMAGEPATH}/include",
+            "/Fd:", "bin/",
+            "/Fo:", "obj/",
+            "/Fe:", "bin/helloworld.exe",
+            // CPP files
+            "main.cpp",
+            "Game.cpp",
+            // SDL libs
+            "SDL2.lib",
+            "SDL2main.lib",
+            // SDL_image libs
+            "SDL2_image.lib",
+            // Linker options
+            "/link",
+            "/LIBPATH:${env:SDLPATH}/lib/x64",
+            "/LIBPATH:${env:SDLIMAGEPATH}/lib/x64",
+            "/SUBSYSTEM:CONSOLE"
+        ],
+        "group": {
+          "kind": "build",
+          "isDefault": true
+        },
+        "presentation": {
+          "reveal": "always"
+        },
+        "problemMatcher": "$msCompile"
+      }
+    ]
+  }
