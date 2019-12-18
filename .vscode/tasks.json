@@ -17,6 +17,7 @@
             // CPP files
             "main.cpp",
             "Game.cpp",
+            "Graphic.cpp",
             // SDL libs
             "SDL2.lib",
             "SDL2main.lib",

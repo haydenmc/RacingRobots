@@ -1,17 +1,20 @@
 #include "Game.h"
-#include <exception>
+#include <stdexcept>
 #include <iostream>
 #include <string>
 
-Game::Game(int w, int h) :
+#pragma region Public Methods
+Game::Game(int w, int h, int frameRateLimit): 
     windowWidth(w),
-    windowHeight(h)
+    windowHeight(h),
+    frameRateLimit(frameRateLimit)
 { }
 
 void Game::Start()
 {
     this->initialize();
     
+    int lastFrameTime = SDL_GetTicks();
     bool quit = false;
     SDL_Event e;
     while(!quit)
@@ -24,15 +27,34 @@ void Game::Start()
                 quit = true;
             }
         }
+        
+        // Cap frame rate (if specified)
+        if (this->frameRateLimit != 0)
+        {
+            if ((SDL_GetTicks() - lastFrameTime) <= this->timePerFrameMs)
+            {
+                SDL_Delay(this->timePerFrameMs - (SDL_GetTicks() - lastFrameTime));
+            }
+        }
 
         // Draw
         this->draw();
+
+        lastFrameTime = SDL_GetTicks();
     }
 }
+#pragma endregion
 
+#pragma region Private Methods
 void Game::initialize()
 {
-    //Initialize SDL
+    // Do some math
+    if (this->frameRateLimit != 0)
+    {
+        this->timePerFrameMs = 1000 / static_cast<double>(this->frameRateLimit);
+    }
+
+    // Initialize SDL
     if (SDL_Init(SDL_INIT_VIDEO) < 0)
     {
         std::string errorString = "SDL could not initialize! SDL_Error: " + std::string(SDL_GetError());
@@ -67,23 +89,7 @@ void Game::initialize()
     }
 
     // Load logo
-    SDL_Surface* logoSurface = IMG_Load("../assets/dvdlogo.png");
-    if (logoSurface == nullptr)
-    {
-        std::string errorString = "Unable to load image! SDL_Error: " + std::string(SDL_GetError());
-        throw std::runtime_error(errorString);
-    }
-
-    //Create texture from surface pixels
-    this->logoTexture = SDL_CreateTextureFromSurface(this->sdlWindowRenderer, logoSurface);
-    if(this->logoTexture == nullptr)
-    {
-        std::string errorString = "Unable to create texture from image! SDL_Error: " + std::string(SDL_GetError());
-        throw std::runtime_error(errorString);
-    }
-
-    //Get rid of old loaded surface
-    SDL_FreeSurface(logoSurface);
+    this->logoGraphic = std::make_unique<Graphic>(this->sdlWindowRenderer, "../assets/dvdlogo.png");
 
     this->isInitialized = true;
 }
@@ -94,7 +100,7 @@ void Game::draw()
     SDL_RenderClear(this->sdlWindowRenderer);
 
     //Render texture to screen
-    SDL_RenderCopy(this->sdlWindowRenderer, this->logoTexture, nullptr, nullptr);
+    this->logoGraphic->Draw();
 
     //Update screen
     SDL_RenderPresent(this->sdlWindowRenderer);
@@ -102,10 +108,6 @@ void Game::draw()
 
 void Game::close()
 {
-    // Deallocate logo surface
-    SDL_DestroyTexture(this->logoTexture);
-    this->logoTexture = nullptr;
-
     // Destroy window
     SDL_DestroyRenderer(this->sdlWindowRenderer);
     SDL_DestroyWindow(this->sdlWindow);
@@ -116,3 +118,4 @@ void Game::close()
     IMG_Quit();
     SDL_Quit();
 }
+#pragma endregion
