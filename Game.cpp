@@ -1,5 +1,7 @@
 #include "Game.h"
+
 #include <stdexcept>
+#include <thread>
 #include <iostream>
 #include <string>
 
@@ -13,8 +15,9 @@ Game::Game(int w, int h, int frameRateLimit):
 void Game::Start()
 {
     this->initialize();
-    
-    int lastFrameTime = SDL_GetTicks();
+
+    std::chrono::high_resolution_clock::time_point lastFrameTime
+        = std::chrono::high_resolution_clock::now();
     bool quit = false;
     SDL_Event e;
     while(!quit)
@@ -31,16 +34,21 @@ void Game::Start()
         // Cap frame rate (if specified)
         if (this->frameRateLimit != 0)
         {
-            if ((SDL_GetTicks() - lastFrameTime) <= this->timePerFrameMs)
+            std::chrono::high_resolution_clock::time_point now
+                = std::chrono::high_resolution_clock::now();
+            std::chrono::duration<double, std::milli> frameDelta = now - lastFrameTime;
+
+            if (frameDelta < this->timePerFrame)
             {
-                SDL_Delay(this->timePerFrameMs - (SDL_GetTicks() - lastFrameTime));
+                std::this_thread::sleep_for(this->timePerFrame - (now - lastFrameTime));
             }
         }
 
         // Draw
         this->draw();
 
-        lastFrameTime = SDL_GetTicks();
+        // Update last frame time
+        lastFrameTime = std::chrono::high_resolution_clock::now();
     }
 }
 #pragma endregion
@@ -51,7 +59,7 @@ void Game::initialize()
     // Do some math
     if (this->frameRateLimit != 0)
     {
-        this->timePerFrameMs = 1000 / static_cast<double>(this->frameRateLimit);
+        this->timePerFrame = std::chrono::duration<double, std::milli>(1000 / static_cast<double>(this->frameRateLimit));
     }
 
     // Initialize SDL
@@ -90,6 +98,8 @@ void Game::initialize()
 
     // Load logo
     this->logoGraphic = std::make_unique<Graphic>(this->sdlWindowRenderer, "../assets/dvdlogo.png");
+    this->logoGraphic->SetVelocityX(1);
+    this->logoGraphic->SetVelocityY(1);
 
     this->isInitialized = true;
 }
@@ -100,6 +110,7 @@ void Game::draw()
     SDL_RenderClear(this->sdlWindowRenderer);
 
     //Render texture to screen
+    this->logoGraphic->Update();
     this->logoGraphic->Draw();
 
     //Update screen

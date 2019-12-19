@@ -2,6 +2,7 @@
 
 #include "Graphic.h"
 
+#include <chrono>
 #include <memory>
 #include <SDL.h>
 #include <SDL_image.h>
@@ -30,7 +31,7 @@ private:
     int windowWidth;
     int windowHeight;
     int frameRateLimit;
-    double timePerFrameMs;
+    std::chrono::duration<double, std::milli> timePerFrame;
 
     int logoX;
     int logoY;
