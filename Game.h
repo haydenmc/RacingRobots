@@ -6,6 +6,7 @@
 #include <memory>
 #include <SDL.h>
 #include <SDL_image.h>
+#include <vector>
 
 class Game
 {
@@ -16,6 +17,7 @@ public:
 private:
     // Private methods
     void initialize();
+    void update(std::chrono::nanoseconds deltaTime);
     void draw();
     void close();
 
@@ -24,14 +26,14 @@ private:
     SDL_Renderer* sdlWindowRenderer = nullptr;
 
     // Graphics
-    std::unique_ptr<Graphic> logoGraphic;
+    std::vector<std::unique_ptr<Graphic>> graphics;
 
     // Misc members
     bool isInitialized = false;
     int windowWidth;
     int windowHeight;
     int frameRateLimit;
-    std::chrono::duration<double, std::milli> timePerFrame;
+    std::chrono::nanoseconds timePerFrame;
 
     int logoX;
     int logoY;

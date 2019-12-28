@@ -12,8 +12,10 @@ Graphic::Graphic(SDL_Renderer* renderer, std::string imagePath) :
         std::string errorString = "Unable to load image! IMG_Error: " + std::string(IMG_GetError());
         throw std::runtime_error(errorString);
     }
-    this->w = loadedSurface->w;
-    this->h = loadedSurface->h;
+    this->sourceWidth = loadedSurface->w;
+    this->sourceHeight = loadedSurface->h;
+    this->width = this->sourceWidth;
+    this->height = this->sourceHeight;
 
     // Create texture from surface pixels
     this->texture = SDL_CreateTextureFromSurface( this->renderer, loadedSurface );
@@ -35,10 +37,10 @@ Graphic::~Graphic()
 void Graphic::Draw()
 {
     SDL_Rect targetRect{
-        static_cast<int>(this->x), // X
-        static_cast<int>(this->y), // Y
-        static_cast<int>(this->w), // W
-        static_cast<int>(this->h)  // H
+        static_cast<int>(this->x),      // X
+        static_cast<int>(this->y),      // Y
+        static_cast<int>(this->width),  // W
+        static_cast<int>(this->height)  // H
     };
     SDL_RenderCopyEx(
         this->renderer,
@@ -51,18 +53,15 @@ void Graphic::Draw()
     );
 }
 
-void Graphic::Update()
+void Graphic::Update(std::chrono::nanoseconds deltaTime)
+{ }
+
+void Graphic::SetX(double x)
 {
-    this->x += this->velocityX;
-    this->y += this->velocityY;
+    this->x = x;
 }
 
-void Graphic::SetVelocityX(double velocityX)
+void Graphic::SetY(double y)
 {
-    this->velocityX = velocityX;
-}
-
-void Graphic::SetVelocityY(double velocityY)
-{
-    this->velocityY = velocityY;
+    this->y = y;
 }

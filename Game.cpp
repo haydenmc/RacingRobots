@@ -1,5 +1,7 @@
 #include "Game.h"
 
+#include "DvdLogo.h"
+
 #include <stdexcept>
 #include <thread>
 #include <iostream>
@@ -17,6 +19,8 @@ void Game::Start()
     this->initialize();
 
     std::chrono::high_resolution_clock::time_point lastFrameTime
+        = std::chrono::high_resolution_clock::now();
+    std::chrono::high_resolution_clock::time_point lastUpdateTime
         = std::chrono::high_resolution_clock::now();
     bool quit = false;
     SDL_Event e;
@@ -36,13 +40,20 @@ void Game::Start()
         {
             std::chrono::high_resolution_clock::time_point now
                 = std::chrono::high_resolution_clock::now();
-            std::chrono::duration<double, std::milli> frameDelta = now - lastFrameTime;
+            auto frameDelta = now - lastFrameTime;
 
             if (frameDelta < this->timePerFrame)
             {
-                std::this_thread::sleep_for(this->timePerFrame - (now - lastFrameTime));
+                auto sleepTime = this->timePerFrame - frameDelta;
+                std::this_thread::sleep_for(sleepTime);
             }
         }
+
+        // Update
+        auto currentUpdateTime = std::chrono::high_resolution_clock::now();
+        auto updateDelta = currentUpdateTime - lastUpdateTime;
+        this->update(updateDelta);
+        lastUpdateTime = currentUpdateTime;
 
         // Draw
         this->draw();
@@ -59,7 +70,7 @@ void Game::initialize()
     // Do some math
     if (this->frameRateLimit != 0)
     {
-        this->timePerFrame = std::chrono::duration<double, std::milli>(1000 / static_cast<double>(this->frameRateLimit));
+        this->timePerFrame = std::chrono::nanoseconds( std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::seconds(1)) / static_cast<long long>(this->frameRateLimit));
     }
 
     // Initialize SDL
@@ -77,8 +88,16 @@ void Game::initialize()
         throw std::runtime_error(errorString);
     }
 
+    // Set some things
+    SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
+
     // Create renderer for window
-    this->sdlWindowRenderer = SDL_CreateRenderer(this->sdlWindow, -1, SDL_RENDERER_ACCELERATED);
+    int rendererFlags = SDL_RENDERER_ACCELERATED;
+    if (this->frameRateLimit == 0)
+    {
+        rendererFlags |= SDL_RENDERER_PRESENTVSYNC;
+    }
+    this->sdlWindowRenderer = SDL_CreateRenderer(this->sdlWindow, -1, rendererFlags);
     if (this->sdlWindowRenderer == nullptr)
     {
         std::string errorString = "Unable to create window renderer! SDL_Error: " + std::string(SDL_GetError());
@@ -97,11 +116,19 @@ void Game::initialize()
     }
 
     // Load logo
-    this->logoGraphic = std::make_unique<Graphic>(this->sdlWindowRenderer, "../assets/dvdlogo.png");
-    this->logoGraphic->SetVelocityX(1);
-    this->logoGraphic->SetVelocityY(1);
+    auto dvdLogo = std::make_unique<DvdLogo>(this->sdlWindowRenderer, 0, 0, windowWidth, windowHeight);
+    this->graphics.push_back(std::move(dvdLogo));
 
     this->isInitialized = true;
+}
+
+void Game::update(std::chrono::nanoseconds deltaTime)
+{
+    // Update all elements
+    for (auto& graphic : this->graphics)
+    {
+        graphic->Update(deltaTime);
+    }
 }
 
 void Game::draw()
@@ -109,9 +136,11 @@ void Game::draw()
     //Clear screen
     SDL_RenderClear(this->sdlWindowRenderer);
 
-    //Render texture to screen
-    this->logoGraphic->Update();
-    this->logoGraphic->Draw();
+    //Render graphics
+    for (auto& graphic : this->graphics)
+    {
+        graphic->Draw();
+    }
 
     //Update screen
     SDL_RenderPresent(this->sdlWindowRenderer);

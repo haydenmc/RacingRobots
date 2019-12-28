@@ -9,6 +9,7 @@
             // Compiler options
             "/EHsc",
             "/Zi",
+            "/std:c++17",
             "/I", "${env:SDLPATH}/include",
             "/I", "${env:SDLIMAGEPATH}/include",
             "/Fd:", "bin/",
@@ -18,6 +19,7 @@
             "main.cpp",
             "Game.cpp",
             "Graphic.cpp",
+            "DvdLogo.cpp",
             // SDL libs
             "SDL2.lib",
             "SDL2main.lib",
