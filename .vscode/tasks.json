@@ -14,12 +14,13 @@
             "/I", "${env:SDLIMAGEPATH}/include",
             "/Fd:", "bin/",
             "/Fo:", "obj/",
-            "/Fe:", "bin/helloworld.exe",
+            "/Fe:", "bin/RacingRobots.exe",
             // CPP files
             "main.cpp",
             "Game.cpp",
             "Graphic.cpp",
-            "DvdLogo.cpp",
+            "Robot.cpp",
+            "Track.cpp",
             // SDL libs
             "SDL2.lib",
             "SDL2main.lib",

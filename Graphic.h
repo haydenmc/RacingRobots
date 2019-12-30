@@ -1,18 +1,19 @@
 #pragma once
 
+#include "IGameEntity.h"
 #include "SDL.h"
 #include "SDL_image.h"
 
 #include <chrono>
 #include <string>
 
-class Graphic
+class Graphic : IGameEntity
 {
 public:
     Graphic(SDL_Renderer* renderer, std::string imagePath);
     ~Graphic();
-    void Draw();
-    virtual void Update(std::chrono::nanoseconds deltaTime);
+    void Draw() override;
+    virtual void Update(std::chrono::nanoseconds deltaTime) override;
     void SetX(double x);
     void SetY(double y);
 

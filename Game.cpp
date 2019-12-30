@@ -1,7 +1,5 @@
 #include "Game.h"
 
-#include "DvdLogo.h"
-
 #include <stdexcept>
 #include <thread>
 #include <iostream>
@@ -115,19 +113,15 @@ void Game::initialize()
         throw std::runtime_error(errorString);
     }
 
-    // Load logo
-    auto dvdLogo = std::make_unique<DvdLogo>(this->sdlWindowRenderer, 0, 0, windowWidth, windowHeight);
-    this->graphics.push_back(std::move(dvdLogo));
-
     this->isInitialized = true;
 }
 
 void Game::update(std::chrono::nanoseconds deltaTime)
 {
-    // Update all elements
-    for (auto& graphic : this->graphics)
+    // Update all entities
+    for (auto& entity : this->gameEntities)
     {
-        graphic->Update(deltaTime);
+        entity->Update(deltaTime);
     }
 }
 
@@ -136,10 +130,10 @@ void Game::draw()
     //Clear screen
     SDL_RenderClear(this->sdlWindowRenderer);
 
-    //Render graphics
-    for (auto& graphic : this->graphics)
+    //Render entities
+    for (auto& entity : this->gameEntities)
     {
-        graphic->Draw();
+        entity->Draw();
     }
 
     //Update screen

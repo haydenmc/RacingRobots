@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Graphic.h"
+#include "IGameEntity.h"
 
 #include <chrono>
 #include <memory>
@@ -26,7 +26,7 @@ private:
     SDL_Renderer* sdlWindowRenderer = nullptr;
 
     // Graphics
-    std::vector<std::unique_ptr<Graphic>> graphics;
+    std::vector<std::unique_ptr<IGameEntity>> gameEntities;
 
     // Misc members
     bool isInitialized = false;
