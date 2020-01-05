@@ -1,2 +1,5 @@
-bin/
+bin/**/*.exe
+bin/**/*.ilk
+bin/**/*.pdb
+bin/**/*.dll
 obj/
