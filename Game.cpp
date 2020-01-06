@@ -36,6 +36,7 @@ void Game::Start()
         // Cap frame rate (if specified)
         if (this->frameRateLimit != 0)
         {
+            // TODO: Use media timers to make this more accurate
             std::chrono::high_resolution_clock::time_point now
                 = std::chrono::high_resolution_clock::now();
             auto frameDelta = now - lastFrameTime;
@@ -68,7 +69,10 @@ void Game::initialize()
     // Do some math
     if (this->frameRateLimit != 0)
     {
-        this->timePerFrame = std::chrono::nanoseconds( std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::seconds(1)) / static_cast<long long>(this->frameRateLimit));
+        this->timePerFrame = std::chrono::nanoseconds(
+            std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::seconds(1)) / 
+            static_cast<long long>(this->frameRateLimit)
+        );
     }
 
     // Initialize SDL
@@ -79,7 +83,14 @@ void Game::initialize()
     }
     
     // Create window
-    this->sdlWindow = SDL_CreateWindow("Hello World", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, windowWidth, windowHeight, SDL_WINDOW_SHOWN);
+    this->sdlWindow = SDL_CreateWindow(
+        "Racing Robots!",
+        SDL_WINDOWPOS_UNDEFINED,
+        SDL_WINDOWPOS_UNDEFINED,
+        windowWidth,
+        windowHeight,
+        SDL_WINDOW_SHOWN
+    );
     if (this->sdlWindow == nullptr)
     {
         std::string errorString = "Window could not be created! SDL_Error: " + std::string(SDL_GetError());
@@ -113,16 +124,70 @@ void Game::initialize()
         throw std::runtime_error(errorString);
     }
 
+    // Load ze robots!
+    this->loadRobots();
+
+    // Set up ze track!
+    this->track = std::make_unique<Track>(
+        this->sdlWindowRenderer,
+        SDL_Rect{0, 0, windowWidth, windowHeight},
+        this->robotRoster // Pass the entire roster for now
+                          // TODO: Randomize participants
+    );
+    
+
     this->isInitialized = true;
+}
+
+void Game::loadRobots()
+{
+    // TODO: Load these from some kind of definition file
+    // Square boy!
+    this->robotRoster.push_back(
+        std::make_shared<Robot>(
+            this->sdlWindowRenderer,
+            L"Square Boy",
+            "assets/robot_01.png"
+        )
+    );
+    // Blue Roundy
+    this->robotRoster.push_back(
+        std::make_shared<Robot>(
+            this->sdlWindowRenderer,
+            L"Blue Roundy",
+            "assets/robot_02.png"
+        )
+    );
+    // Spiky Lady
+    this->robotRoster.push_back(
+        std::make_shared<Robot>(
+            this->sdlWindowRenderer,
+            L"Spiky Lady",
+            "assets/robot_03.png"
+        )
+    );
+    // Pointy Orange
+    this->robotRoster.push_back(
+        std::make_shared<Robot>(
+            this->sdlWindowRenderer,
+            L"Pointy Orange",
+            "assets/robot_04.png"
+        )
+    );
+    // Boring Diamond
+    this->robotRoster.push_back(
+        std::make_shared<Robot>(
+            this->sdlWindowRenderer,
+            L"Boring Diamond",
+            "assets/robot_05.png"
+        )
+    );
 }
 
 void Game::update(std::chrono::nanoseconds deltaTime)
 {
-    // Update all entities
-    for (auto& entity : this->gameEntities)
-    {
-        entity->Update(deltaTime);
-    }
+    // Update track
+    this->track->Update(deltaTime);
 }
 
 void Game::draw()
@@ -130,11 +195,8 @@ void Game::draw()
     //Clear screen
     SDL_RenderClear(this->sdlWindowRenderer);
 
-    //Render entities
-    for (auto& entity : this->gameEntities)
-    {
-        entity->Draw();
-    }
+    //Render track
+    this->track->Draw();
 
     //Update screen
     SDL_RenderPresent(this->sdlWindowRenderer);

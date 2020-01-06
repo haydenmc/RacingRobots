@@ -16,6 +16,8 @@ public:
     virtual void Update(std::chrono::nanoseconds deltaTime) override;
     void SetX(double x);
     void SetY(double y);
+    double GetWidth();
+    double GetHeight();
 
 protected:
     double x;

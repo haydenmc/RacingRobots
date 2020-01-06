@@ -2,16 +2,16 @@
 
 #include "Graphic.h"
 
-class Robot : Graphic
+class Robot : public Graphic
 {
 public:
     Robot(
         SDL_Renderer* renderer,
-        std::string name,
+        std::wstring name,
         std::string imagePath
     );
 private:
-    std::string name;
+    std::wstring name;
     unsigned int totalWins = 0;
     unsigned int totalRaces = 0;
 };

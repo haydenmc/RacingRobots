@@ -65,3 +65,13 @@ void Graphic::SetY(double y)
 {
     this->y = y;
 }
+
+double Graphic::GetWidth()
+{
+    return this->width;
+}
+
+double Graphic::GetHeight()
+{
+    return this->height;
+}

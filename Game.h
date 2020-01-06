@@ -1,6 +1,8 @@
 #pragma once
 
 #include "IGameEntity.h"
+#include "Robot.h"
+#include "Track.h"
 
 #include <chrono>
 #include <memory>
@@ -17,6 +19,7 @@ public:
 private:
     // Private methods
     void initialize();
+    void loadRobots();
     void update(std::chrono::nanoseconds deltaTime);
     void draw();
     void close();
@@ -25,8 +28,9 @@ private:
     SDL_Window* sdlWindow = nullptr;
     SDL_Renderer* sdlWindowRenderer = nullptr;
 
-    // Graphics
-    std::vector<std::unique_ptr<IGameEntity>> gameEntities;
+    // Game data
+    std::unique_ptr<Track> track;
+    std::vector<std::shared_ptr<Robot>> robotRoster;
 
     // Misc members
     bool isInitialized = false;
