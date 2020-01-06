@@ -40,13 +40,21 @@ void Track::Draw()
 
 void Track::Update(std::chrono::nanoseconds deltaTime)
 {
-    
+    for (auto& robot : this->robots)
+    {
+        robot->Update(deltaTime);
+    }
 }
 #pragma endregion
 
 #pragma region Track methods
 void Track::StartRace()
 {
+    std::wcout << "Race started!" << std::endl;
+    for (auto& robot : this->robots)
+    {
+        robot->StartRace();
+    }
     this->raceStarted = true;
 }
 #pragma endregion

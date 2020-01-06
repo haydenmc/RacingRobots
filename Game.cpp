@@ -134,20 +134,31 @@ void Game::initialize()
         this->robotRoster // Pass the entire roster for now
                           // TODO: Randomize participants
     );
-    
+
+    // Start the race!
+    this->track->StartRace();
 
     this->isInitialized = true;
 }
 
 void Game::loadRobots()
 {
+    auto defaultTraits = RobotTraits {
+        std::tuple<double, double>(0.01, 0.02),       // minVelocityWindow
+        std::tuple<double, double>(0.05, 0.20),       // maxVelocityWindow
+        std::tuple<double, double>(0.00001, 0.0008),  // accelerationWindow
+        std::tuple<double, double>(10.00, 150.00),    // maxStaminaWindow
+        std::tuple<double, double>(0.10, 0.30)        // staminaRechargeRateWindow
+    };
+
     // TODO: Load these from some kind of definition file
     // Square boy!
     this->robotRoster.push_back(
         std::make_shared<Robot>(
             this->sdlWindowRenderer,
             L"Square Boy",
-            "assets/robot_01.png"
+            "assets/robot_01.png",
+            defaultTraits
         )
     );
     // Blue Roundy
@@ -155,7 +166,8 @@ void Game::loadRobots()
         std::make_shared<Robot>(
             this->sdlWindowRenderer,
             L"Blue Roundy",
-            "assets/robot_02.png"
+            "assets/robot_02.png",
+            defaultTraits
         )
     );
     // Spiky Lady
@@ -163,7 +175,8 @@ void Game::loadRobots()
         std::make_shared<Robot>(
             this->sdlWindowRenderer,
             L"Spiky Lady",
-            "assets/robot_03.png"
+            "assets/robot_03.png",
+            defaultTraits
         )
     );
     // Pointy Orange
@@ -171,7 +184,8 @@ void Game::loadRobots()
         std::make_shared<Robot>(
             this->sdlWindowRenderer,
             L"Pointy Orange",
-            "assets/robot_04.png"
+            "assets/robot_04.png",
+            defaultTraits
         )
     );
     // Boring Diamond
@@ -179,7 +193,8 @@ void Game::loadRobots()
         std::make_shared<Robot>(
             this->sdlWindowRenderer,
             L"Boring Diamond",
-            "assets/robot_05.png"
+            "assets/robot_05.png",
+            defaultTraits
         )
     );
 }
