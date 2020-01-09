@@ -29,7 +29,8 @@ private:
     SDL_Renderer* sdlWindowRenderer = nullptr;
 
     // Game data
-    std::unique_ptr<Track> track;
+    std::vector<std::shared_ptr<IGameEntity>> gameEntities;
+    std::shared_ptr<Track> track;
     std::vector<std::shared_ptr<Robot>> robotRoster;
 
     // Misc members

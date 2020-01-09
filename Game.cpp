@@ -1,5 +1,8 @@
 #include "Game.h"
 
+#include "SDL_ttf.h"
+#include "Text.h"
+
 #include <stdexcept>
 #include <thread>
 #include <iostream>
@@ -124,6 +127,9 @@ void Game::initialize()
         throw std::runtime_error(errorString);
     }
 
+    // Initialize text
+    Text::Initialize();
+
     // Load ze robots!
     this->loadRobots();
 
@@ -134,6 +140,14 @@ void Game::initialize()
         this->robotRoster // Pass the entire roster for now
                           // TODO: Randomize participants
     );
+    this->gameEntities.push_back(this->track);
+    this->gameEntities.push_back(std::make_shared<Text>(
+        this->sdlWindowRenderer,
+        FontFace::Default,
+        64,
+        SDL_Color{255, 255, 255, 255},
+        "Racing Robots!"
+    ));
 
     // Start the race!
     this->track->StartRace();
@@ -144,11 +158,11 @@ void Game::initialize()
 void Game::loadRobots()
 {
     auto defaultTraits = RobotTraits {
-        std::tuple<double, double>(0.01, 0.02),       // minVelocityWindow
-        std::tuple<double, double>(0.05, 0.20),       // maxVelocityWindow
-        std::tuple<double, double>(0.00001, 0.0008),  // accelerationWindow
-        std::tuple<double, double>(10.00, 150.00),    // maxStaminaWindow
-        std::tuple<double, double>(0.10, 0.30)        // staminaRechargeRateWindow
+        std::tuple<double, double>(0.01, 0.02),        // minVelocityWindow
+        std::tuple<double, double>(0.05, 0.20),        // maxVelocityWindow
+        std::tuple<double, double>(0.000005, 0.0008),  // accelerationWindow
+        std::tuple<double, double>(30.00, 60.00),      // maxStaminaWindow
+        std::tuple<double, double>(0.10, 0.30)         // staminaRechargeRateWindow
     };
 
     // TODO: Load these from some kind of definition file
@@ -201,8 +215,11 @@ void Game::loadRobots()
 
 void Game::update(std::chrono::nanoseconds deltaTime)
 {
-    // Update track
-    this->track->Update(deltaTime);
+    // Update entities
+    for (auto& entity : this->gameEntities)
+    {
+        entity->Update(deltaTime);
+    }
 }
 
 void Game::draw()
@@ -210,8 +227,11 @@ void Game::draw()
     //Clear screen
     SDL_RenderClear(this->sdlWindowRenderer);
 
-    //Render track
-    this->track->Draw();
+    //Render entities
+    for (auto& entity : this->gameEntities)
+    {
+        entity->Draw();
+    }
 
     //Update screen
     SDL_RenderPresent(this->sdlWindowRenderer);

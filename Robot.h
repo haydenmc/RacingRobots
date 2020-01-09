@@ -8,6 +8,7 @@
 
 struct RobotTraits
 {
+    // TODO: Add distributions to each trait
     // The robot's minimum non-sprint speed
     std::tuple<double, double> minVelocityWindow;
     // The fastest this robot can go

@@ -5,7 +5,8 @@
             "includePath": [
                 "${workspaceFolder}/**",
                 "${env:SDLPATH}/include",
-                "${env:SDLIMAGEPATH}/include"
+                "${env:SDLIMAGEPATH}/include",
+                "${env:SDLTTFPATH}/include"
             ],
             "defines": [
                 "_DEBUG",
