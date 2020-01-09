@@ -48,13 +48,13 @@ private:
     static std::map<std::pair<FontFace, int>, std::shared_ptr<Text::Font>> fontMap;
 
     /* Private members */
-    SDL_Renderer* renderer;
+    SDL_Renderer* renderer = nullptr;
     FontFace fontFace;
     int pointSize;
     SDL_Color color;
     std::string content;
-    std::shared_ptr<Font> font;
-    SDL_Texture* texture;
+    std::shared_ptr<Font> font {};
+    SDL_Texture* texture = nullptr;
     double x;
     double y;
     double width;
@@ -73,6 +73,6 @@ public:
 
 private:
     /* Private members */
-    TTF_Font* font;
-    SDL_Surface* surface;
+    TTF_Font* font = nullptr;
+    SDL_Surface* surface = nullptr;
 };
