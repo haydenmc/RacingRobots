@@ -86,6 +86,7 @@ void Text::updateTexture()
     if (this->texture != nullptr)
     {
         SDL_DestroyTexture(this->texture);
+        this->texture = nullptr;
     }
 
     // Render to temporary new surface

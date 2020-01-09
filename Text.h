@@ -55,10 +55,10 @@ private:
     std::string content;
     std::shared_ptr<Font> font {};
     SDL_Texture* texture = nullptr;
-    double x;
-    double y;
-    double width;
-    double height;
+    double x = 0.0;
+    double y = 0.0;
+    double width = 0.0;
+    double height = 0.0;
 };
 
 class Text::Font
