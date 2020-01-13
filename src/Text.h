@@ -27,6 +27,8 @@ public:
 
     /* Public methods */
     void SetContent(std::string content);
+    void SetX(double x);
+    void SetY(double y);
 
     /* IGameEntity */
     void Draw() override;

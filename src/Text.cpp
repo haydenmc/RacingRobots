@@ -42,6 +42,16 @@ void Text::SetContent(std::string content)
     this->updateTexture();
 }
 
+void Text::SetX(double x)
+{
+    this->x = x;
+}
+
+void Text::SetY(double y)
+{
+    this->y = y;
+}
+
 /* IGameEntity */
 void Text::Draw()
 {

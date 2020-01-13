@@ -1,6 +1,7 @@
 #include "Game.h"
 
 #include "SDL_ttf.h"
+#include "Scenes/Title.h"
 #include "Text.h"
 
 #include <stdexcept>
@@ -136,20 +137,22 @@ void Game::initialize()
     // Init scenes
     this->initializeScenes();
 
-    // Start us off on the race track
-    this->currentScene = this->scenes[SceneId::Track];
-
-    // Start the race
-    auto trackScene = std::static_pointer_cast<Track>(this->scenes[SceneId::Track]);
-    trackScene->StartRace();
+    // Start us off on the title scene
+    this->currentScene = this->scenes[SceneId::Title];
 
     this->isInitialized = true;
 }
 
 void Game::initializeScenes()
 {
+    // Title scene
+    this->scenes.insert_or_assign(SceneId::Title, std::make_shared<Title>
+    (
+        this->sdlWindowRenderer
+    ));
     // Track scene
-    this->scenes.insert_or_assign(SceneId::Track, std::make_shared<Track>(
+    this->scenes.insert_or_assign(SceneId::Track, std::make_shared<Track>
+    (
         this->sdlWindowRenderer,
         SDL_Rect{0, 0, windowWidth, windowHeight},
         this->robotRoster
