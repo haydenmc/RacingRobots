@@ -7,7 +7,7 @@
 #include <chrono>
 #include <string>
 
-class Graphic : IGameEntity
+class Graphic : public IGameEntity
 {
 public:
     Graphic(SDL_Renderer* renderer, std::string imagePath);

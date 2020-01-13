@@ -1,7 +1,7 @@
 #pragma once
 
-#include "IGameEntity.h"
-#include "Robot.h"
+#include "Scene.h"
+#include "Entities/Robot.h"
 
 #include <chrono>
 #include <memory>
@@ -11,7 +11,7 @@
  * @brief Represents the racing track and contains
  *        all of the robots participating in the race.
  */
-class Track : public IGameEntity
+class Track : public Scene
 {
 public:
     // Constructor/Destructor
@@ -20,10 +20,6 @@ public:
         SDL_Rect renderingBounds,
         std::vector<std::shared_ptr<Robot>> robots
     );
-
-    // IGameEntity
-    void Draw() override;
-    void Update(std::chrono::nanoseconds deltaTime) override;
 
     // Track methods
     void StartRace();

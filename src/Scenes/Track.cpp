@@ -14,6 +14,13 @@ Track::Track(
 {
     std::wcout << "Constructing track..." << std::endl;
 
+    // Add robots to game entities
+    for (auto& robot : this->robots)
+    {
+        auto robotGameEntity = std::static_pointer_cast<IGameEntity>(robot);
+        this->gameEntities.push_back(robotGameEntity);
+    }
+
     // Set the starting lineup positions!
     unsigned int robotCount = this->robots.size();
     unsigned int startingX = this->renderingBounds.x + this->BORDER_BUFFER;
@@ -24,25 +31,6 @@ Track::Track(
         auto& robot = this->robots.at(i);
         robot->SetX(startingX);
         robot->SetY(startingY + (i * staggerY) + (robot->GetHeight() / 2));
-    }
-}
-#pragma endregion
-
-#pragma region IGameEntity
-void Track::Draw()
-{
-    // Draw each robot
-    for (auto& robot : this->robots)
-    {
-        robot->Draw();
-    }
-}
-
-void Track::Update(std::chrono::nanoseconds deltaTime)
-{
-    for (auto& robot : this->robots)
-    {
-        robot->Update(deltaTime);
     }
 }
 #pragma endregion

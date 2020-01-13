@@ -10,6 +10,7 @@
             "/EHsc",
             "/Zi",
             "/std:c++17",
+            "/I", "src",
             "/I", "${env:SDLPATH}/include",
             "/I", "${env:SDLIMAGEPATH}/include",
             "/I", "${env:SDLTTFPATH}/include",
@@ -17,12 +18,16 @@
             "/Fo:", "obj/",
             "/Fe:", "bin/RacingRobots.exe",
             // CPP files
-            "main.cpp",
-            "Game.cpp",
-            "Graphic.cpp",
-            "Robot.cpp",
-            "Track.cpp",
-            "Text.cpp",
+            "src/main.cpp",
+            "src/Game.cpp",
+            "src/Graphic.cpp",
+            "src/Scene.cpp",
+            "src/Text.cpp",
+            //    scenes
+            "src/Scenes/Title.cpp",
+            "src/Scenes/Track.cpp",
+            //    entities
+            "src/Entities/Robot.cpp",
             // SDL libs
             "SDL2.lib",
             "SDL2main.lib",

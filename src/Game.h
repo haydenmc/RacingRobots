@@ -1,14 +1,21 @@
 #pragma once
 
 #include "IGameEntity.h"
-#include "Robot.h"
-#include "Track.h"
+#include "Entities/Robot.h"
+#include "Scenes/Track.h"
 
 #include <chrono>
+#include <map>
 #include <memory>
 #include <SDL.h>
 #include <SDL_image.h>
 #include <vector>
+
+enum class SceneId
+{
+    Title,
+    Track
+};
 
 class Game
 {
@@ -16,9 +23,10 @@ public:
     Game(int w, int h, int frameRateLimit = 0);
     void Start();
 
-private:
+private: 
     // Private methods
     void initialize();
+    void initializeScenes();
     void loadRobots();
     void update(std::chrono::nanoseconds deltaTime);
     void draw();
@@ -29,17 +37,14 @@ private:
     SDL_Renderer* sdlWindowRenderer = nullptr;
 
     // Game data
-    std::vector<std::shared_ptr<IGameEntity>> gameEntities;
-    std::shared_ptr<Track> track;
+    std::map<SceneId, std::shared_ptr<Scene>> scenes;
+    std::shared_ptr<Scene> currentScene;
     std::vector<std::shared_ptr<Robot>> robotRoster;
 
     // Misc members
     bool isInitialized = false;
-    int windowWidth;
-    int windowHeight;
-    int frameRateLimit;
+    int windowWidth = 0;
+    int windowHeight = 0;
+    int frameRateLimit = 0;
     std::chrono::nanoseconds timePerFrame;
-
-    int logoX;
-    int logoY;
 };

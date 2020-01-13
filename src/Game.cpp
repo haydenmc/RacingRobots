@@ -133,26 +133,27 @@ void Game::initialize()
     // Load ze robots!
     this->loadRobots();
 
-    // Set up ze track!
-    this->track = std::make_unique<Track>(
-        this->sdlWindowRenderer,
-        SDL_Rect{0, 0, windowWidth, windowHeight},
-        this->robotRoster // Pass the entire roster for now
-                          // TODO: Randomize participants
-    );
-    this->gameEntities.push_back(this->track);
-    this->gameEntities.push_back(std::make_shared<Text>(
-        this->sdlWindowRenderer,
-        FontFace::Default,
-        64,
-        SDL_Color{255, 255, 255, 255},
-        "Racing Robots!"
-    ));
+    // Init scenes
+    this->initializeScenes();
 
-    // Start the race!
-    this->track->StartRace();
+    // Start us off on the race track
+    this->currentScene = this->scenes[SceneId::Track];
+
+    // Start the race
+    auto trackScene = std::static_pointer_cast<Track>(this->scenes[SceneId::Track]);
+    trackScene->StartRace();
 
     this->isInitialized = true;
+}
+
+void Game::initializeScenes()
+{
+    // Track scene
+    this->scenes.insert_or_assign(SceneId::Track, std::make_shared<Track>(
+        this->sdlWindowRenderer,
+        SDL_Rect{0, 0, windowWidth, windowHeight},
+        this->robotRoster
+    ));
 }
 
 void Game::loadRobots()
@@ -215,25 +216,19 @@ void Game::loadRobots()
 
 void Game::update(std::chrono::nanoseconds deltaTime)
 {
-    // Update entities
-    for (auto& entity : this->gameEntities)
-    {
-        entity->Update(deltaTime);
-    }
+    // Update current scene
+    this->currentScene->Update(deltaTime);
 }
 
 void Game::draw()
 {
-    //Clear screen
+    // Clear screen
     SDL_RenderClear(this->sdlWindowRenderer);
 
-    //Render entities
-    for (auto& entity : this->gameEntities)
-    {
-        entity->Draw();
-    }
+    // Draw current scene
+    this->currentScene->Draw();
 
-    //Update screen
+    // Update screen
     SDL_RenderPresent(this->sdlWindowRenderer);
 }
 
