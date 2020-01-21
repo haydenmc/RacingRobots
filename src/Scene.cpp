@@ -1,10 +1,21 @@
 #include "Scene.h"
 
 #pragma region Constructor/Destructor
-Scene::Scene()
+Scene::Scene(
+    SDL_Renderer* sdlRenderer,
+    SDL_Rect sceneBounds
+) : 
+    sdlRenderer(sdlRenderer),
+    sceneBounds(sceneBounds)
 { }
 
-Scene::Scene(std::vector<std::shared_ptr<IGameEntity>> gameEntities) : 
+Scene::Scene(
+    SDL_Renderer* sdlRenderer,
+    SDL_Rect sceneBounds,
+    std::vector<std::shared_ptr<IGameEntity>> gameEntities
+) : 
+    sdlRenderer(sdlRenderer),
+    sceneBounds(sceneBounds),
     gameEntities(gameEntities)
 { }
 #pragma endregion

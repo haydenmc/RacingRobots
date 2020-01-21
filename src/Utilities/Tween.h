@@ -12,13 +12,16 @@
 
 #pragma region Easing Functions
 /**
- * @brief Linear easing function
+ * @brief Static class to contain easing functions
  */
-class LinearEasingFunction
+class EasingFunctions
 {
 public:
+    /**
+     * Linear easing function
+     */
     template<typename T>
-    static T EasingValue(
+    static T LinearEase(
         std::chrono::milliseconds currentTimeMs,
         T beginningValue,
         T changeInValue,
@@ -28,13 +31,12 @@ public:
         double durationPercentage = (currentTimeMs.count() / static_cast<double>(durationMs.count()));
         return (changeInValue * durationPercentage) + beginningValue;
     };
-};
 
-class QuartOutEasingFunction
-{
-public:
+    /**
+     * Quartic easing out function
+     */
     template<typename T>
-    static T EasingValue(
+    static T QuartOutEase(
         std::chrono::milliseconds currentTimeMs,
         T beginningValue,
         T changeInValue,
@@ -53,10 +55,18 @@ public:
 /**
  * @brief Simple static class to tween properties on game entities
  */
-template<typename EasingFunction, typename T>
+template<typename T>
 class Tweener
 {
 private:
+    std::function<
+        T(
+            std::chrono::milliseconds currentTimeMs,
+            T beginningValue,
+            T changeInValue,
+            std::chrono::milliseconds durationMs
+        )
+    > easingFunction;
     std::function<void(T)> valueSetter;
     bool isRunning = false;
     T beginningValue;
@@ -66,11 +76,20 @@ private:
 
 public:
     Tweener(
+        std::function<
+            T(
+                std::chrono::milliseconds currentTimeMs,
+                T beginningValue,
+                T changeInValue,
+                std::chrono::milliseconds durationMs
+            )
+        > easingFunction,
         std::function<void(T)> valueSetter,
         T beginningValue,
         T changeInValue,
         std::chrono::milliseconds durationMs
     ) : 
+        easingFunction(easingFunction),
         valueSetter(valueSetter),
         beginningValue(beginningValue),
         changeInValue(changeInValue),
@@ -89,7 +108,7 @@ public:
         {
             auto deltaTimeMs = std::chrono::duration_cast<std::chrono::milliseconds>(deltaTime);
             this->elapsedTimeMs += deltaTimeMs;
-            T newValue = EasingFunction::EasingValue<T>(
+            T newValue = this->easingFunction(
                 this->elapsedTimeMs,
                 this->beginningValue,
                 this->changeInValue,

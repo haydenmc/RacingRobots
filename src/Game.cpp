@@ -148,7 +148,8 @@ void Game::initializeScenes()
     // Title scene
     this->scenes.insert_or_assign(SceneId::Title, std::make_shared<Title>
     (
-        this->sdlWindowRenderer
+        this->sdlWindowRenderer,
+        SDL_Rect{0, 0, windowWidth, windowHeight}
     ));
     // Track scene
     this->scenes.insert_or_assign(SceneId::Track, std::make_shared<Track>

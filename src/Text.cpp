@@ -52,6 +52,16 @@ void Text::SetY(double y)
     this->y = y;
 }
 
+double Text::GetWidth()
+{
+    return this->width;
+}
+
+double Text::GetHeight()
+{
+    return this->height;
+}
+
 /* IGameEntity */
 void Text::Draw()
 {

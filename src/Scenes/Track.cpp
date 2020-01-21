@@ -8,8 +8,7 @@ Track::Track(
     SDL_Rect renderingBounds,
     std::vector<std::shared_ptr<Robot>> robots
 ) : 
-    renderer(renderer),
-    renderingBounds(renderingBounds),
+    Scene(renderer, renderingBounds),
     robots(robots)
 {
     std::wcout << "Constructing track..." << std::endl;

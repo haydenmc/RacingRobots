@@ -29,6 +29,8 @@ public:
     void SetContent(std::string content);
     void SetX(double x);
     void SetY(double y);
+    double GetWidth();
+    double GetHeight();
 
     /* IGameEntity */
     void Draw() override;

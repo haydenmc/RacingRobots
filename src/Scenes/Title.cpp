@@ -1,10 +1,11 @@
 #include "Title.h"
 
-#include "Utilities/Tween.h"
-
 #pragma region Constructor/Destructor
-Title::Title(SDL_Renderer* sdlRenderer) : 
-    sdlRenderer(sdlRenderer)
+Title::Title(
+    SDL_Renderer* sdlRenderer,
+    SDL_Rect sceneBounds
+) : 
+    Scene(sdlRenderer, sceneBounds)
 {
     // Instantitate scene elements
     this->titleText = std::make_shared<Text>
@@ -15,19 +16,20 @@ Title::Title(SDL_Renderer* sdlRenderer) :
         SDL_Color{255, 255, 255, 255},
         "Racing Robots!"
     );
-    this->gameEntities.push_back(this->titleText);
-
-    // Set up tweening for title text animation
-    this->titleTextAnimation = std::make_shared<Tweener<QuartOutEasingFunction, double>>
-    (
-        std::bind(&Text::SetX, this->titleText, std::placeholders::_1),
-        100.0,
-        500.0,
-        std::chrono::milliseconds(2000)
+    // Center text in scene
+    auto titleTextWidth = this->titleText->GetWidth();
+    auto titleTextHeight = this->titleText->GetHeight();
+    this->titleText->SetX(
+        (this->sceneBounds.w / 2.0) - 
+        (titleTextWidth / 2.0) + 
+        this->sceneBounds.x
     );
-
-    // Start the animation!
-    this->titleTextAnimation->Start();
+    this->titleText->SetY(
+        (this->sceneBounds.h / 2.0) - 
+        (titleTextHeight / 2.0) + 
+        this->sceneBounds.x
+    );
+    this->gameEntities.push_back(this->titleText);
 }
 #pragma endregion
 
@@ -36,6 +38,6 @@ void Title::Update(std::chrono::nanoseconds deltaTime)
 {
     Scene::Update(deltaTime);
     // And also update our animation!
-    this->titleTextAnimation->Update(deltaTime);
+    //this->titleTextAnimation->Update(deltaTime);
 }
 #pragma endregion

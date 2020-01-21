@@ -1,6 +1,7 @@
 #pragma once
 
 #include "IGameEntity.h"
+#include "SDL.h"
 
 #include <memory>
 #include <vector>
@@ -13,13 +14,22 @@ class Scene : public IGameEntity
 {
 public:
     /* Constructor/Destructor */
-    Scene();
-    Scene(std::vector<std::shared_ptr<IGameEntity>> gameEntities);
+    Scene(
+        SDL_Renderer* sdlRenderer,
+        SDL_Rect sceneBounds
+    );
+    Scene(
+        SDL_Renderer* sdlRenderer,
+        SDL_Rect sceneBounds,
+        std::vector<std::shared_ptr<IGameEntity>> gameEntities
+    );
 
     /* IGameEntity */
     virtual void Draw() override;
     virtual void Update(std::chrono::nanoseconds deltaTime) override;
 
 protected:
+    SDL_Renderer* sdlRenderer;
+    SDL_Rect sceneBounds;
     std::vector<std::shared_ptr<IGameEntity>> gameEntities;
 };

@@ -8,14 +8,15 @@
 class Title : public Scene
 {
 public:
-    Title(SDL_Renderer* sdlRenderer);
+    Title(
+        SDL_Renderer* sdlRenderer,
+        SDL_Rect sceneBounds
+    );
 
     /* Scene */
     void Update(std::chrono::nanoseconds deltaTime) override;
 
 private:
-    SDL_Renderer* sdlRenderer;
-
     std::shared_ptr<Text> titleText = nullptr;
-    std::shared_ptr<Tweener<QuartOutEasingFunction, double>> titleTextAnimation = nullptr;
+    std::shared_ptr<Tweener<double>> titleTextAnimation = nullptr;
 };
