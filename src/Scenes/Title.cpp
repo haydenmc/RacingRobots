@@ -16,6 +16,7 @@ Title::Title(
         SDL_Color{255, 255, 255, 255},
         "Racing Robots!"
     );
+
     // Center text in scene
     auto titleTextWidth = this->titleText->GetWidth();
     auto titleTextHeight = this->titleText->GetHeight();
@@ -30,6 +31,29 @@ Title::Title(
         this->sceneBounds.x
     );
     this->gameEntities.push_back(this->titleText);
+
+    // Set up title text animation
+    this->titleTextAnimation = std::make_shared<Tweener<double>>(
+        &EasingFunctions::QuartOutEase<double>,
+        [this](double value)
+        {
+            // Scale up
+            this->titleText->SetWidthScale(value);
+            this->titleText->SetHeightScale(value);
+
+            // Center to screen
+            auto centeredScaledX = (this->sceneBounds.w / 2.0) -
+                ((this->titleText->GetWidth() * value) / 2.0);
+            auto centeredScaledY = (this->sceneBounds.h / 2.0) -
+                ((this->titleText->GetHeight() * value) / 2.0);
+            this->titleText->SetX(centeredScaledX);
+            this->titleText->SetY(centeredScaledY);
+        },
+        0.0,
+        1.0,
+        std::chrono::milliseconds(2000)
+    );
+    this->titleTextAnimation->Start();
 }
 #pragma endregion
 
@@ -38,6 +62,6 @@ void Title::Update(std::chrono::nanoseconds deltaTime)
 {
     Scene::Update(deltaTime);
     // And also update our animation!
-    //this->titleTextAnimation->Update(deltaTime);
+    this->titleTextAnimation->Update(deltaTime);
 }
 #pragma endregion

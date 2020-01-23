@@ -42,6 +42,16 @@ void Text::SetContent(std::string content)
     this->updateTexture();
 }
 
+double Text::GetX()
+{
+    return this->x;
+}
+
+double Text::GetY()
+{
+    return this->y;
+}
+
 void Text::SetX(double x)
 {
     this->x = x;
@@ -50,6 +60,16 @@ void Text::SetX(double x)
 void Text::SetY(double y)
 {
     this->y = y;
+}
+
+void Text::SetWidthScale(double widthScale)
+{
+    this->widthScale = widthScale;
+}
+
+void Text::SetHeightScale(double heightScale)
+{
+    this->heightScale = heightScale;
 }
 
 double Text::GetWidth()
@@ -66,10 +86,10 @@ double Text::GetHeight()
 void Text::Draw()
 {
     SDL_Rect targetRect{
-        static_cast<int>(this->x),      // X
-        static_cast<int>(this->y),      // Y
-        static_cast<int>(this->width),  // W
-        static_cast<int>(this->height)  // H
+        static_cast<int>(this->x),                          // X
+        static_cast<int>(this->y),                          // Y
+        static_cast<int>(this->width * this->widthScale),   // W
+        static_cast<int>(this->height * this->heightScale)  // H
     };
     SDL_RenderCopyEx(
         this->renderer,
@@ -92,7 +112,8 @@ void Text::Initialize()
     // Initialize SDL2_TTF
     if (TTF_Init() == -1)
     {
-        std::string errorString = "Unable to initialize SDL_ttf! SDL_Error: " + std::string(SDL_GetError());
+        std::string errorString = "Unable to initialize SDL_ttf! SDL_Error: " + 
+            std::string(SDL_GetError());
         throw std::runtime_error(errorString);
     }
     Text::initialized = true;

@@ -27,8 +27,12 @@ public:
 
     /* Public methods */
     void SetContent(std::string content);
+    double GetX();
+    double GetY();
     void SetX(double x);
     void SetY(double y);
+    void SetWidthScale(double widthScale);
+    void SetHeightScale(double heightScale);
     double GetWidth();
     double GetHeight();
 
@@ -63,6 +67,8 @@ private:
     double y = 0.0;
     double width = 0.0;
     double height = 0.0;
+    double widthScale = 1.0;
+    double heightScale = 1.0;
 };
 
 class Text::Font
