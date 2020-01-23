@@ -2,10 +2,10 @@
 
 #pragma region Constructor/Destructor
 Title::Title(
-    SDL_Renderer* sdlRenderer,
+    std::weak_ptr<Game> game,
     SDL_Rect sceneBounds
 ) : 
-    Scene(sdlRenderer, sceneBounds)
+    Scene(game, sceneBounds)
 {
     // Instantitate scene elements
     this->titleText = std::make_shared<Text>
@@ -53,6 +53,16 @@ Title::Title(
         1.0,
         std::chrono::milliseconds(2000)
     );
+
+    auto animCompleteCallback = [this](){
+        std::wcout << "Title animation done!" << std::endl;
+        if (auto game = this->weakGame.lock())
+        {
+            game->ChangeScene(SceneId::Track);
+        }
+    };
+
+    this->titleTextAnimation->Completed.Subscribe(animCompleteCallback);
     this->titleTextAnimation->Start();
 }
 #pragma endregion

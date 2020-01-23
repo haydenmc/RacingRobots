@@ -2,22 +2,31 @@
 
 #pragma region Constructor/Destructor
 Scene::Scene(
-    SDL_Renderer* sdlRenderer,
+    std::weak_ptr<Game> game,
     SDL_Rect sceneBounds
 ) : 
-    sdlRenderer(sdlRenderer),
+    weakGame(game),
     sceneBounds(sceneBounds)
-{ }
+{
+    if (auto gamePtr = game.lock())
+    {
+        this->sdlRenderer = gamePtr->GetSDLRenderer();
+    }
+}
 
 Scene::Scene(
-    SDL_Renderer* sdlRenderer,
+    std::weak_ptr<Game> game,
     SDL_Rect sceneBounds,
     std::vector<std::shared_ptr<IGameEntity>> gameEntities
 ) : 
-    sdlRenderer(sdlRenderer),
     sceneBounds(sceneBounds),
     gameEntities(gameEntities)
-{ }
+{
+    if (auto gamePtr = game.lock())
+    {
+        this->sdlRenderer = gamePtr->GetSDLRenderer();
+    }
+}
 #pragma endregion
 
 #pragma region IGameEntity

@@ -16,7 +16,7 @@ class Track : public Scene
 public:
     // Constructor/Destructor
     Track(
-        SDL_Renderer* renderer,
+        std::weak_ptr<Game> game,
         SDL_Rect renderingBounds,
         std::vector<std::shared_ptr<Robot>> robots
     );
@@ -29,8 +29,6 @@ private:
     const int BORDER_BUFFER = 32;
 
     // References
-    SDL_Renderer* renderer;
-    SDL_Rect renderingBounds;
     std::vector<std::shared_ptr<Robot>> robots;
 
     // Track state

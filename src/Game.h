@@ -2,7 +2,7 @@
 
 #include "IGameEntity.h"
 #include "Entities/Robot.h"
-#include "Scenes/Track.h"
+#include "Scene.h"
 
 #include <chrono>
 #include <map>
@@ -11,17 +11,24 @@
 #include <SDL_image.h>
 #include <vector>
 
+class Scene; // forward declare since these are circular dependencies
+
 enum class SceneId
 {
     Title,
     Track
 };
 
-class Game
+class Game : 
+    public std::enable_shared_from_this<Game>
 {
 public:
     Game(int w, int h, int frameRateLimit = 0);
     void Start();
+    void ChangeScene(SceneId toScene);
+
+    /* Getters/Setters */
+    SDL_Renderer* GetSDLRenderer();
 
 private: 
     // Private methods

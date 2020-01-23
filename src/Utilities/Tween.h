@@ -6,6 +6,8 @@
 
 #pragma once
 
+#include "Utilities/Event.h"
+
 #include <chrono>
 #include <functional>
 #include <iostream>
@@ -75,6 +77,8 @@ private:
     std::chrono::milliseconds elapsedTimeMs;
 
 public:
+    Event<> Completed;
+
     Tweener(
         std::function<
             T(
@@ -120,7 +124,7 @@ public:
             {
                 this->valueSetter(this->beginningValue + this->changeInValue);
                 this->isRunning = false;
-                // TODO: Finished event
+                this->Completed.Fire();
             }
         }
     }

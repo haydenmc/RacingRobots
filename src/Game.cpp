@@ -2,6 +2,7 @@
 
 #include "SDL_ttf.h"
 #include "Scenes/Title.h"
+#include "Scenes/Track.h"
 #include "Text.h"
 
 #include <stdexcept>
@@ -64,6 +65,16 @@ void Game::Start()
         // Update last frame time
         lastFrameTime = std::chrono::high_resolution_clock::now();
     }
+}
+
+void Game::ChangeScene(SceneId toScene)
+{
+    this->currentScene = this->scenes[toScene];
+}
+
+SDL_Renderer* Game::GetSDLRenderer()
+{
+    return this->sdlWindowRenderer;
 }
 #pragma endregion
 
@@ -148,13 +159,13 @@ void Game::initializeScenes()
     // Title scene
     this->scenes.insert_or_assign(SceneId::Title, std::make_shared<Title>
     (
-        this->sdlWindowRenderer,
+        this->weak_from_this(),
         SDL_Rect{0, 0, windowWidth, windowHeight}
     ));
     // Track scene
     this->scenes.insert_or_assign(SceneId::Track, std::make_shared<Track>
     (
-        this->sdlWindowRenderer,
+        this->weak_from_this(),
         SDL_Rect{0, 0, windowWidth, windowHeight},
         this->robotRoster
     ));

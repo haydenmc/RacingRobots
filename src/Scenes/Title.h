@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Game.h"
 #include "Scene.h"
 #include "SDL.h"
 #include "Text.h"
@@ -9,7 +10,7 @@ class Title : public Scene
 {
 public:
     Title(
-        SDL_Renderer* sdlRenderer,
+        std::weak_ptr<Game> game,
         SDL_Rect sceneBounds
     );
 
