@@ -27,6 +27,17 @@ public:
         std::vector<std::shared_ptr<IGameEntity>> gameEntities
     );
 
+    /* Scene methods */
+    /**
+     * @brief Invoked by the Game when this scene is being shown.
+     */
+    virtual void Showing() = 0;
+
+    /**
+     * @brief Invoked by the Game when this scene is hidden.
+     */
+    virtual void Hidden() = 0;
+
     /* IGameEntity */
     virtual void Draw() override;
     virtual void Update(std::chrono::nanoseconds deltaTime) override;

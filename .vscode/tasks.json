@@ -25,6 +25,7 @@
             "src/Text.cpp",
             //    scenes
             "src/Scenes/Title.cpp",
+            "src/Scenes/Lobby.cpp",
             "src/Scenes/Track.cpp",
             //    entities
             "src/Entities/Robot.cpp",

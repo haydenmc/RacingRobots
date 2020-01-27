@@ -16,6 +16,7 @@ class Scene; // forward declare since these are circular dependencies
 enum class SceneId
 {
     Title,
+    Lobby,
     Track
 };
 
@@ -28,16 +29,17 @@ public:
     void ChangeScene(SceneId toScene);
 
     /* Getters/Setters */
+    void SetRacerCount(unsigned int count);
+    unsigned int GetRacerCount();
     SDL_Renderer* GetSDLRenderer();
+    const std::vector<std::shared_ptr<Robot>>& GetRobotLineup();
 
-private: 
-    // Private methods
-    void initialize();
-    void initializeScenes();
-    void loadRobots();
-    void update(std::chrono::nanoseconds deltaTime);
-    void draw();
-    void close();
+    /* Robot roster management */
+    void GenerateNewLineup();
+
+private:
+    // Const values
+    unsigned int racerCount = 5;
 
     // SDL members
     SDL_Window* sdlWindow = nullptr;
@@ -47,6 +49,7 @@ private:
     std::map<SceneId, std::shared_ptr<Scene>> scenes;
     std::shared_ptr<Scene> currentScene;
     std::vector<std::shared_ptr<Robot>> robotRoster;
+    std::vector<std::shared_ptr<Robot>> robotLineup;
 
     // Misc members
     bool isInitialized = false;
@@ -54,4 +57,12 @@ private:
     int windowHeight = 0;
     int frameRateLimit = 0;
     std::chrono::nanoseconds timePerFrame;
+
+    // Private methods
+    void initialize();
+    void initializeScenes();
+    void loadRobots();
+    void update(std::chrono::nanoseconds deltaTime);
+    void draw();
+    void close();
 };

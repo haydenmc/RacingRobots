@@ -2,39 +2,38 @@
 
 #include "Scene.h"
 #include "Entities/Robot.h"
+#include "Text.h"
 
 #include <chrono>
 #include <memory>
 #include <vector>
 
 /**
- * @brief Represents the racing track and contains
- *        all of the robots participating in the race.
+ * @brief Represents the lobby where the robots prep for the race.
  */
-class Track : public Scene
+class Lobby : public Scene
 {
 public:
-    // Constructor/Destructor
-    Track(
+    /* Constructor/Destructor */
+    Lobby(
         std::weak_ptr<Game> game,
-        SDL_Rect renderingBounds,
-        std::vector<std::shared_ptr<Robot>> robots
+        SDL_Rect renderingBounds
     );
 
     /* Scene */
     void Showing() override;
     void Hidden() override;
+    void Draw() override;
+    void Update(std::chrono::nanoseconds deltaTime) override;
 
 private:
     // Constants
     const int BORDER_BUFFER = 32;
 
     // References
-    std::vector<std::shared_ptr<Robot>> robots;
+    std::shared_ptr<Text> headerText;
+    std::vector<std::shared_ptr<Robot>> robotLineup;
 
     // Track state
     bool raceStarted;
-
-    // Track methods
-    void StartRace();
 };

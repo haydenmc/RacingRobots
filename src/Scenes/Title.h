@@ -15,6 +15,8 @@ public:
     );
 
     /* Scene */
+    void Showing() override;
+    void Hidden() override;
     void Update(std::chrono::nanoseconds deltaTime) override;
 
 private:

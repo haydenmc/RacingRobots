@@ -34,6 +34,18 @@ Track::Track(
 }
 #pragma endregion
 
+#pragma region Scene
+void Track::Showing()
+{
+    this->StartRace();
+}
+
+void Track::Hidden()
+{
+
+}
+#pragma endregion
+
 #pragma region Track methods
 void Track::StartRace()
 {

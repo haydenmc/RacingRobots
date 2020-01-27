@@ -58,16 +58,25 @@ Title::Title(
         std::wcout << "Title animation done!" << std::endl;
         if (auto game = this->weakGame.lock())
         {
-            game->ChangeScene(SceneId::Track);
+            game->ChangeScene(SceneId::Lobby);
         }
     };
 
     this->titleTextAnimation->Completed.Subscribe(animCompleteCallback);
-    this->titleTextAnimation->Start();
 }
 #pragma endregion
 
 #pragma region Scene
+void Title::Showing()
+{
+    this->titleTextAnimation->Start();
+}
+
+void Title::Hidden()
+{
+    // Nothing for now.
+}
+
 void Title::Update(std::chrono::nanoseconds deltaTime)
 {
     Scene::Update(deltaTime);

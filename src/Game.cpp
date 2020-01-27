@@ -2,6 +2,7 @@
 
 #include "SDL_ttf.h"
 #include "Scenes/Title.h"
+#include "Scenes/Lobby.h"
 #include "Scenes/Track.h"
 #include "Text.h"
 
@@ -69,12 +70,57 @@ void Game::Start()
 
 void Game::ChangeScene(SceneId toScene)
 {
+    if (this->currentScene)
+    {
+        this->currentScene->Hidden(); // Hide existing scene
+    }
     this->currentScene = this->scenes[toScene];
+    this->currentScene->Showing();
+}
+
+void Game::SetRacerCount(unsigned int count)
+{
+    this->racerCount = count;
+}
+
+unsigned int Game::GetRacerCount()
+{
+    return this->racerCount;
 }
 
 SDL_Renderer* Game::GetSDLRenderer()
 {
     return this->sdlWindowRenderer;
+}
+
+const std::vector<std::shared_ptr<Robot>>& Game::GetRobotLineup()
+{
+    return this->robotLineup;
+}
+
+void Game::GenerateNewLineup()
+{
+    // Shuffle the lineup, then take the first up to racerCount
+    auto shuffledRoster = this->robotRoster;
+    std::shuffle(
+        shuffledRoster.begin(),
+        shuffledRoster.end(),
+        std::default_random_engine()
+    );
+    this->robotLineup.clear();
+    if (shuffledRoster.size() < this->racerCount)
+    {
+        std::cerr << "Not enough robots in the roster "
+                     "to fill the starting lineup. :(" << std::endl;
+    }
+    unsigned int lineupCount = std::min(
+        static_cast<unsigned int>(shuffledRoster.size()),
+        this->racerCount
+    );
+    for (unsigned int i = 0; i < lineupCount; ++i)
+    {
+        this->robotLineup.push_back(shuffledRoster.at(i));
+    }
 }
 #pragma endregion
 
@@ -149,7 +195,7 @@ void Game::initialize()
     this->initializeScenes();
 
     // Start us off on the title scene
-    this->currentScene = this->scenes[SceneId::Title];
+    this->ChangeScene(SceneId::Title);
 
     this->isInitialized = true;
 }
@@ -162,6 +208,14 @@ void Game::initializeScenes()
         this->weak_from_this(),
         SDL_Rect{0, 0, windowWidth, windowHeight}
     ));
+
+    // Lobby scene
+    this->scenes.insert_or_assign(SceneId::Lobby, std::make_shared<Lobby>
+    (
+        this->weak_from_this(),
+        SDL_Rect{0, 0, windowWidth, windowHeight}
+    ));
+
     // Track scene
     this->scenes.insert_or_assign(SceneId::Track, std::make_shared<Track>
     (
@@ -232,7 +286,10 @@ void Game::loadRobots()
 void Game::update(std::chrono::nanoseconds deltaTime)
 {
     // Update current scene
-    this->currentScene->Update(deltaTime);
+    if (this->currentScene)
+    {
+        this->currentScene->Update(deltaTime);
+    }
 }
 
 void Game::draw()
@@ -241,7 +298,10 @@ void Game::draw()
     SDL_RenderClear(this->sdlWindowRenderer);
 
     // Draw current scene
-    this->currentScene->Draw();
+    if (this->currentScene)
+    {
+        this->currentScene->Draw();
+    }
 
     // Update screen
     SDL_RenderPresent(this->sdlWindowRenderer);
