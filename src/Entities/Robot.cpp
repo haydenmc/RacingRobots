@@ -24,6 +24,11 @@ void Robot::StartRace()
     this->isRacing = true;
 }
 
+std::wstring Robot::GetName()
+{
+    return this->name;
+}
+
 void Robot::Update(std::chrono::nanoseconds deltaTime)
 {
     auto deltaTimeMs = std::chrono::duration_cast<std::chrono::milliseconds>(deltaTime);

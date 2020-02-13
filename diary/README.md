@@ -6,6 +6,24 @@ milestones I reach when I'm working on a project. So here's where I'll do that!
 I'm a little late in starting this, so the very beginning entries will be 
 missing. Maybe I'll backfill them later.
 
+## 20-02-12 / SDL2_gfx and Lobby Improvements
+
+I wanted to render "stats cards" for each robot at various points in the game, 
+so I created a `StatCard` entity and started playing with what the card would 
+look like. I ended up having to grab 
+[SDL2_gfx](https://sourceforge.net/projects/sdl2gfx/) in order to render 
+more complex 2D primitives (like thicker lines) which took up a bunch of time 
+to build. I ended up writing my own little script to build it on Windows 
+[here](https://github.com/haydenmc/sdl2gfx/blob/master/windowsbuild.cmd).
+
+It looks significantly nicer now!
+
+![Screenshot of the new and improved lobby scene, complete with cool little 
+stat cards](200212-startinglineup.png)
+
+Soon I need to figure out core gameplay mechanics (I have a very very simple 
+racing scene up and running now).
+
 ## 20-01-26 / Lobby Scene
 
 Today I added a Lobby scene! This is where you'll be able to see a summary 

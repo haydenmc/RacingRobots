@@ -295,6 +295,7 @@ void Game::update(std::chrono::nanoseconds deltaTime)
 void Game::draw()
 {
     // Clear screen
+    SDL_SetRenderDrawColor(this->sdlWindowRenderer, 0, 0, 0, 255);
     SDL_RenderClear(this->sdlWindowRenderer);
 
     // Draw current scene

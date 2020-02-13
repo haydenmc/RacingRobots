@@ -14,40 +14,33 @@ Title::Title(
         FontFace::Default,
         64,
         SDL_Color{255, 255, 255, 255},
-        "Racing Robots!"
+        L"Racing Robots!"
     );
 
-    // Center text in scene
+    // Set text out-of-bounds to animate in
     auto titleTextWidth = this->titleText->GetWidth();
     auto titleTextHeight = this->titleText->GetHeight();
+    double startX = this->sceneBounds.x - titleTextWidth;
+    double endX = this->sceneBounds.x + 48.0;
+    double deltaX = endX - startX;
     this->titleText->SetX(
-        (this->sceneBounds.w / 2.0) - 
-        (titleTextWidth / 2.0) + 
-        this->sceneBounds.x
+        startX
     );
     this->titleText->SetY(
         (this->sceneBounds.h / 2.0) - 
         (titleTextHeight / 2.0) + 
-        this->sceneBounds.x
+        this->sceneBounds.y
     );
     this->gameEntities.push_back(this->titleText);
 
     // Set up title text animation
     this->titleTextAnimation = std::make_shared<Tweener<double>>(
         &EasingFunctions::QuartOutEase<double>,
-        [this](double value)
+        [this, startX, deltaX](double value)
         {
-            // Scale up
-            this->titleText->SetWidthScale(value);
-            this->titleText->SetHeightScale(value);
-
-            // Center to screen
-            auto centeredScaledX = (this->sceneBounds.w / 2.0) -
-                ((this->titleText->GetWidth() * value) / 2.0);
-            auto centeredScaledY = (this->sceneBounds.h / 2.0) -
-                ((this->titleText->GetHeight() * value) / 2.0);
-            this->titleText->SetX(centeredScaledX);
-            this->titleText->SetY(centeredScaledY);
+            // Bring into view, left-aligned
+            auto newX = startX + (deltaX * value);
+            this->titleText->SetX(newX);
         },
         0.0,
         1.0,

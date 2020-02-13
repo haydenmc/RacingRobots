@@ -2,6 +2,7 @@
 
 #include "Scene.h"
 #include "Entities/Robot.h"
+#include "Entities/StatCard.h"
 #include "Text.h"
 
 #include <chrono>
@@ -33,6 +34,7 @@ private:
     // References
     std::shared_ptr<Text> headerText;
     std::vector<std::shared_ptr<Robot>> robotLineup;
+    std::vector<std::shared_ptr<StatCard>> statCards;
 
     // Track state
     bool raceStarted;

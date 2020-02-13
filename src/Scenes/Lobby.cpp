@@ -14,17 +14,13 @@ Lobby::Lobby(
     (
         this->sdlRenderer,
         FontFace::Default,
-        32,
+        48,
         SDL_Color{255, 255, 255, 255},
-        "Starting Lineup"
+        L"Starting Lineup"
     );
-    // Position top center in the scene
-    this->headerText->SetX(
-        (this->sceneBounds.w / 2) - 
-        (this->headerText->GetWidth() / 2) + 
-        this->sceneBounds.x
-    );
-    this->headerText->SetY(0);
+    // Position top left in the scene
+    this->headerText->SetX(this->sceneBounds.x + 48.0);
+    this->headerText->SetY(this->sceneBounds.y + 48.0);
     this->gameEntities.push_back(this->headerText);
 }
 #pragma endregion
@@ -44,19 +40,29 @@ void Lobby::Showing()
 
     // We'll position the lineup about 1/2 of the way down the screen
     double yPos = (this->sceneBounds.h / 2.0) + this->sceneBounds.y;
-    double xBuffer = 128;
-    double xStagger = 
-            (this->sceneBounds.w - (xBuffer * 2)) / 
-            (static_cast<double>(this->robotLineup.size() - 1));
+    double xBuffer = 48.0;
+    double cardMargin = 32.0;
+    double cardWidth = 
+        (this->sceneBounds.w - (xBuffer * 2) -
+            (cardMargin * (this->robotLineup.size() - 1))) / 
+        (this->robotLineup.size());
+
+    // Generate stat cards for each robot!
+    this->statCards.clear();
     for (unsigned int i = 0; i < this->robotLineup.size(); ++i)
     {
-        auto& robot = this->robotLineup.at(i);
-        robot->SetX(
+        const auto& robot = this->robotLineup.at(i);
+        auto statCard = std::make_shared<StatCard>(this->sdlRenderer, robot);
+        statCard->SetWidth(cardWidth);
+        statCard->SetX(
             xBuffer + 
-            (xStagger * static_cast<double>(i)) - 
-            (robot->GetWidth() / 2.0)
+            (cardWidth * static_cast<double>(i)) +
+            (cardMargin * static_cast<double>(i))
         );
-        robot->SetY(yPos);
+        statCard->SetY(
+            yPos - (statCard->GetHeight() / 2.0)
+        );
+        this->statCards.push_back(statCard);
     }
 }
 
@@ -68,9 +74,9 @@ void Lobby::Hidden()
 void Lobby::Draw()
 {
     this->Scene::Draw();
-    for (auto& robot : this->robotLineup)
+    for (auto& statCard : this->statCards)
     {
-        robot->Draw();
+        statCard->Draw();
     }
 }
 

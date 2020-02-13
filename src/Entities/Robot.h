@@ -32,8 +32,9 @@ public:
     );
     
     void StartRace();
+    std::wstring GetName();
 
-    // Graphic
+    /* Graphic */
     void Update(std::chrono::nanoseconds deltaTime) override;
 private:
     void recalculateTraits();

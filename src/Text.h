@@ -22,11 +22,11 @@ public:
         FontFace fontFace,
         int pointSize,
         SDL_Color color,
-        std::string content
+        std::wstring content
     );
 
     /* Public methods */
-    void SetContent(std::string content);
+    void SetContent(std::wstring content);
     double GetX();
     double GetY();
     void SetX(double x);
@@ -60,7 +60,7 @@ private:
     FontFace fontFace;
     int pointSize;
     SDL_Color color;
-    std::string content;
+    std::wstring content;
     std::shared_ptr<Font> font {};
     SDL_Texture* texture = nullptr;
     double x = 0.0;

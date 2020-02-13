@@ -14,6 +14,7 @@
             "/I", "${env:SDLPATH}/include",
             "/I", "${env:SDLIMAGEPATH}/include",
             "/I", "${env:SDLTTFPATH}/include",
+            "/I", "${env:SDLGFXPATH}",
             "/Fd:", "bin/",
             "/Fo:", "obj/",
             "/Fe:", "bin/RacingRobots.exe",
@@ -29,6 +30,7 @@
             "src/Scenes/Track.cpp",
             //    entities
             "src/Entities/Robot.cpp",
+            "src/Entities/StatCard.cpp",
             // SDL libs
             "SDL2.lib",
             "SDL2main.lib",
@@ -36,11 +38,14 @@
             "SDL2_image.lib",
             // SDL_ttf libs
             "SDL2_ttf.lib",
+            // SDL2_gfx lib
+            "SDL2_gfx.lib",
             // Linker options
             "/link",
             "/LIBPATH:${env:SDLPATH}/lib/x64",
             "/LIBPATH:${env:SDLIMAGEPATH}/lib/x64",
             "/LIBPATH:${env:SDLTTFPATH}/lib/x64",
+            "/LIBPATH:${env:SDLGFXPATH}",
             "/SUBSYSTEM:CONSOLE"
         ],
         "group": {

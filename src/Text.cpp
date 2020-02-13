@@ -8,7 +8,7 @@ Text::Text(
     FontFace fontFace,
     int pointSize,
     SDL_Color color,
-    std::string content
+    std::wstring content
 ) : 
     renderer(renderer),
     fontFace(fontFace),
@@ -36,7 +36,7 @@ Text::Text(
 #pragma endregion
 
 #pragma region Public methods
-void Text::SetContent(std::string content)
+void Text::SetContent(std::wstring content)
 {
     this->content = content;
     this->updateTexture();
@@ -131,9 +131,9 @@ void Text::updateTexture()
     }
 
     // Render to temporary new surface
-    SDL_Surface* surface = TTF_RenderText_Solid(
+    SDL_Surface* surface = TTF_RenderUNICODE_Solid(
         this->font->GetTTFFont(),
-        this->content.c_str(),
+        reinterpret_cast<const uint16_t*>(this->content.c_str()),
         this->color
     );
     
