@@ -21,8 +21,10 @@ Title::Title(
     auto titleTextWidth = this->titleText->GetWidth();
     auto titleTextHeight = this->titleText->GetHeight();
     double startX = this->sceneBounds.x - titleTextWidth;
-    double endX = this->sceneBounds.x + 48.0;
-    double deltaX = endX - startX;
+    double inX = this->sceneBounds.x + 48.0;
+    double deltaInX = inX - startX;
+    double outX = this->sceneBounds.w;
+    double deltaOutX = outX - inX;
     this->titleText->SetX(
         startX
     );
@@ -34,35 +36,50 @@ Title::Title(
     this->gameEntities.push_back(this->titleText);
 
     // Set up title text animation
-    this->titleTextAnimation = std::make_shared<Tweener<double>>(
+    this->titleTextEntranceAnimation = std::make_shared<Tweener<double>>(
         &EasingFunctions::QuartOutEase<double>,
-        [this, startX, deltaX](double value)
+        [this, startX, deltaInX](double value)
         {
             // Bring into view, left-aligned
-            auto newX = startX + (deltaX * value);
+            auto newX = startX + (deltaInX * value);
             this->titleText->SetX(newX);
         },
         0.0,
         1.0,
-        std::chrono::milliseconds(2000)
+        std::chrono::milliseconds(1200)
     );
 
-    auto animCompleteCallback = [this](){
+    this->titleTextExitAnimation = std::make_shared<Tweener<double>>(
+        &EasingFunctions::QuartInEase<double>,
+        [this, inX, deltaOutX](double value)
+        {
+            // Bring out of view, left-aligned
+            auto newX = inX + (deltaOutX * value);
+            this->titleText->SetX(newX);
+        },
+        0.0,
+        1.0,
+        std::chrono::milliseconds(1200)
+    );
+
+    this->titleTextEntranceAnimation->Completed.Subscribe([this](){
+        this->titleTextExitAnimation->Start();
+    });
+
+    this->titleTextExitAnimation->Completed.Subscribe([this](){
         std::wcout << "Title animation done!" << std::endl;
         if (auto game = this->weakGame.lock())
         {
             game->ChangeScene(SceneId::Lobby);
         }
-    };
-
-    this->titleTextAnimation->Completed.Subscribe(animCompleteCallback);
+    });
 }
 #pragma endregion
 
 #pragma region Scene
 void Title::Showing()
 {
-    this->titleTextAnimation->Start();
+    this->titleTextEntranceAnimation->Start();
 }
 
 void Title::Hidden()
@@ -74,6 +91,7 @@ void Title::Update(std::chrono::nanoseconds deltaTime)
 {
     Scene::Update(deltaTime);
     // And also update our animation!
-    this->titleTextAnimation->Update(deltaTime);
+    this->titleTextEntranceAnimation->Update(deltaTime);
+    this->titleTextExitAnimation->Update(deltaTime);
 }
 #pragma endregion

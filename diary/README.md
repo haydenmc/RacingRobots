@@ -6,6 +6,22 @@ milestones I reach when I'm working on a project. So here's where I'll do that!
 I'm a little late in starting this, so the very beginning entries will be 
 missing. Maybe I'll backfill them later.
 
+## 20-02-17 / Slow but steady progress
+
+Today I made a few cosmetic tweaks, but the main functional improvement is the 
+addition of a couple of timers. The first in the lobby while we're waiting for 
+players to place bets, and the second on the track counting down to the race 
+start.
+
+Also tweaked the title screen a bit.
+
+Next up, I just need some finisher logic, and then we have a full (rudimentary) 
+game loop that I can begin trying to set up broadcasting for!
+
+![Screenshot of the timer in the lobby](200217-lobbytimer.png)
+
+![Screenshot of the race countdown](200217-racecountdown.png)
+
 ## 20-02-12 / SDL2_gfx and Lobby Improvements
 
 I wanted to render "stats cards" for each robot at various points in the game, 

@@ -35,6 +35,23 @@ public:
     };
 
     /**
+     * Quartic easing in function
+     */
+    template<typename T>
+    static T QuartInEase(
+        std::chrono::milliseconds currentTimeMs,
+        T beginningValue,
+        T changeInValue,
+        std::chrono::milliseconds durationMs
+    )
+    {
+        long long currentTime = currentTimeMs.count();
+        long long duration = durationMs.count();
+        double durationPercentage = (currentTime / static_cast<double>(duration));
+        return changeInValue * std::pow(durationPercentage, 4) + beginningValue;
+    };
+
+    /**
      * Quartic easing out function
      */
     template<typename T>
@@ -110,7 +127,8 @@ public:
     {
         if (this->isRunning)
         {
-            auto deltaTimeMs = std::chrono::duration_cast<std::chrono::milliseconds>(deltaTime);
+            auto deltaTimeMs = 
+                std::chrono::duration_cast<std::chrono::milliseconds>(deltaTime);
             this->elapsedTimeMs += deltaTimeMs;
             T newValue = this->easingFunction(
                 this->elapsedTimeMs,

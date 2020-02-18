@@ -105,7 +105,7 @@ void Game::GenerateNewLineup()
     std::shuffle(
         shuffledRoster.begin(),
         shuffledRoster.end(),
-        std::default_random_engine()
+        std::default_random_engine(std::random_device{}())
     );
     this->robotLineup.clear();
     if (shuffledRoster.size() < this->racerCount)
@@ -220,8 +220,7 @@ void Game::initializeScenes()
     this->scenes.insert_or_assign(SceneId::Track, std::make_shared<Track>
     (
         this->weak_from_this(),
-        SDL_Rect{0, 0, windowWidth, windowHeight},
-        this->robotRoster
+        SDL_Rect{0, 0, windowWidth, windowHeight}
     ));
 }
 

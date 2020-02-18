@@ -38,8 +38,11 @@ Text::Text(
 #pragma region Public methods
 void Text::SetContent(std::wstring content)
 {
-    this->content = content;
-    this->updateTexture();
+    if (this->content.compare(content) != 0)
+    {
+        this->content = content;
+        this->updateTexture();
+    }
 }
 
 double Text::GetX()
@@ -82,6 +85,16 @@ double Text::GetHeight()
     return this->height;
 }
 
+double Text::GetOpacity()
+{
+    return this->opacity;
+}
+
+void Text::SetOpacity(double opacity)
+{
+    this->opacity = opacity;
+}
+
 /* IGameEntity */
 void Text::Draw()
 {
@@ -91,6 +104,8 @@ void Text::Draw()
         static_cast<int>(this->width * this->widthScale),   // W
         static_cast<int>(this->height * this->heightScale)  // H
     };
+    SDL_SetTextureAlphaMod(this->texture,
+        static_cast<uint8_t>(this->opacity * 255.0));
     SDL_RenderCopyEx(
         this->renderer,
         this->texture,

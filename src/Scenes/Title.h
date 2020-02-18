@@ -21,5 +21,6 @@ public:
 
 private:
     std::shared_ptr<Text> titleText = nullptr;
-    std::shared_ptr<Tweener<double>> titleTextAnimation = nullptr;
+    std::shared_ptr<Tweener<double>> titleTextEntranceAnimation = nullptr;
+    std::shared_ptr<Tweener<double>> titleTextExitAnimation = nullptr;
 };

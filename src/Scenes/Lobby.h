@@ -33,9 +33,11 @@ private:
 
     // References
     std::shared_ptr<Text> headerText;
+    std::shared_ptr<Text> timerText;
     std::vector<std::shared_ptr<Robot>> robotLineup;
     std::vector<std::shared_ptr<StatCard>> statCards;
 
-    // Track state
-    bool raceStarted;
+    // Lobby state
+    std::chrono::milliseconds elapsedTimeMs;
+    std::chrono::milliseconds lastTimerUpdateMs;
 };

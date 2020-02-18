@@ -18,10 +18,22 @@ Lobby::Lobby(
         SDL_Color{255, 255, 255, 255},
         L"Starting Lineup"
     );
+    this->timerText = std::make_shared<Text>
+    (
+        this->sdlRenderer,
+        FontFace::Default,
+        48,
+        SDL_Color{255, 255, 255, 255},
+        L"00:00"
+    );
     // Position top left in the scene
     this->headerText->SetX(this->sceneBounds.x + 48.0);
     this->headerText->SetY(this->sceneBounds.y + 48.0);
+    this->timerText->SetX(this->sceneBounds.w - 
+        this->timerText->GetWidth() - 48.0);
+    this->timerText->SetY(this->sceneBounds.y + 48.0);
     this->gameEntities.push_back(this->headerText);
+    this->gameEntities.push_back(this->timerText);
 }
 #pragma endregion
 
@@ -64,6 +76,10 @@ void Lobby::Showing()
         );
         this->statCards.push_back(statCard);
     }
+
+    // Reset the timer
+    this->elapsedTimeMs = std::chrono::milliseconds(0);
+    this->lastTimerUpdateMs = std::chrono::milliseconds(0);
 }
 
 void Lobby::Hidden()
@@ -83,6 +99,44 @@ void Lobby::Draw()
 void Lobby::Update(std::chrono::nanoseconds deltaTime)
 {
     this->Scene::Update(deltaTime);
+
+    // Update elapsed time
+    auto deltaTimeMs = 
+        std::chrono::duration_cast<std::chrono::milliseconds>(deltaTime);
+    this->elapsedTimeMs += deltaTimeMs;
+
+    // Update timer text
+    if (this->lastTimerUpdateMs.count() == 0 || 
+        this->elapsedTimeMs - this->lastTimerUpdateMs > std::chrono::seconds(1))
+    {
+        auto timeRemainingSeconds =
+            (std::chrono::seconds(Game::LobbyTimeSeconds) - 
+            std::chrono::duration_cast<std::chrono::seconds>(
+                this->elapsedTimeMs)).count();
+        if (timeRemainingSeconds < 0)
+        {
+            timeRemainingSeconds = 0;
+            // TODO: start fade-out/transition
+            if (auto game = this->weakGame.lock())
+            {
+                game->ChangeScene(SceneId::Track);
+            }
+            else
+            {
+                throw std::runtime_error(
+                    "Lobby lost reference to Game object.");
+            }
+        }
+        unsigned int timerMinutes = timeRemainingSeconds / 60u;
+        unsigned int timerSeconds =
+            timeRemainingSeconds - (timerMinutes * 60u);
+        wchar_t buffer [32];
+        int cx = swprintf(buffer, 32, L"%02d:%02d", timerMinutes, timerSeconds);
+        std::wstring timerString = std::wstring(buffer);
+        this->timerText->SetContent(timerString);
+        this->lastTimerUpdateMs = this->elapsedTimeMs;
+    }
+
     for (auto& robot : this->robotLineup)
     {
         robot->Update(deltaTime);

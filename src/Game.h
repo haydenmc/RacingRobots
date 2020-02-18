@@ -24,7 +24,13 @@ class Game :
     public std::enable_shared_from_this<Game>
 {
 public:
+    /* Statics/Constants */
+    static const int LobbyTimeSeconds = 5;
+
+    /* Constructor */
     Game(int w, int h, int frameRateLimit = 0);
+
+    /* Public methods */
     void Start();
     void ChangeScene(SceneId toScene);
 

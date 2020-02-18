@@ -35,6 +35,8 @@ public:
     void SetHeightScale(double heightScale);
     double GetWidth();
     double GetHeight();
+    double GetOpacity();
+    void SetOpacity(double opacity);
 
     /* IGameEntity */
     void Draw() override;
@@ -69,6 +71,7 @@ private:
     double height = 0.0;
     double widthScale = 1.0;
     double heightScale = 1.0;
+    double opacity = 1.0;
 };
 
 class Text::Font
