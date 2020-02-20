@@ -42,6 +42,9 @@ public:
 
     /* Robot roster management */
     void GenerateNewLineup();
+    void CommitRaceResults(
+        std::vector<std::shared_ptr<Robot>> orderedFinisherListDesc);
+    std::vector<std::shared_ptr<Robot>> GetLastRaceResults();
 
 private:
     // Const values
@@ -56,6 +59,7 @@ private:
     std::shared_ptr<Scene> currentScene;
     std::vector<std::shared_ptr<Robot>> robotRoster;
     std::vector<std::shared_ptr<Robot>> robotLineup;
+    std::vector<std::shared_ptr<Robot>> lastRaceFinisherList;
 
     // Misc members
     bool isInitialized = false;

@@ -31,8 +31,15 @@ public:
         RobotTraits traits
     );
     
-    void StartRace();
+    void StartRacing();
+    void StopRacing();
     std::wstring GetName();
+    double GetX();
+    double GetY();
+    unsigned int GetWins();
+    void SetWins(unsigned int wins);
+    unsigned int GetLosses();
+    void SetLosses(unsigned int losses);
 
     /* Graphic */
     void Update(std::chrono::nanoseconds deltaTime) override;
@@ -46,7 +53,7 @@ private:
     /* Robot info */
     std::wstring name;
     unsigned int totalWins = 0;
-    unsigned int totalRaces = 0;
+    unsigned int totalLosses = 0;
 
     /* Racing traits */
     RobotTraits traits;

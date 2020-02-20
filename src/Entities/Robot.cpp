@@ -18,15 +18,50 @@ Robot::Robot(
     this->recalculateTraits();
 }
 
-void Robot::StartRace()
+void Robot::StartRacing()
 {
     std::wcout << this->name << " starting race!" << std::endl;
     this->isRacing = true;
 }
 
+void Robot::StopRacing()
+{
+    this->isRacing = false;
+}
+
 std::wstring Robot::GetName()
 {
     return this->name;
+}
+
+double Robot::GetX()
+{
+    return this->x;
+}
+
+double Robot::GetY()
+{
+    return this->y;
+}
+
+unsigned int Robot::GetWins()
+{
+    return this->totalWins;
+}
+
+void Robot::SetWins(unsigned int wins)
+{
+    this->totalWins = wins;
+}
+
+unsigned int Robot::GetLosses()
+{
+    return this->totalLosses;
+}
+
+void Robot::SetLosses(unsigned int losses)
+{
+    this->totalLosses = losses;
 }
 
 void Robot::Update(std::chrono::nanoseconds deltaTime)

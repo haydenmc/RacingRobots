@@ -6,6 +6,23 @@ milestones I reach when I'm working on a project. So here's where I'll do that!
 I'm a little late in starting this, so the very beginning entries will be 
 missing. Maybe I'll backfill them later.
 
+## 20-02-19 / The finish line!
+
+Today I added a finish line to the race track, and logic to calculate placing 
+when robots cross the line. I also added a countdown timer that appears when 
+the first robot crosses, so DNFs can be assigned to robots who don't manage 
+to finish within 30 seconds after the first-place winner.
+
+I spent an unexpected amount of time changing up my `Countdown` component to 
+make it flexible enough to use in several places - next up I need to write a
+`Summary` scene so stats and placing information can be displayed after the 
+race. After that, the "core loop" will be complete, and you'll be able to watch 
+robots race over and over again!
+
+Still trying to think of what to do for better art assets...
+
+![Screenshot of the 30 second race end countdown timer](200219-finishtimer.png)
+
 ## 20-02-17 / Slow but steady progress
 
 Today I made a few cosmetic tweaks, but the main functional improvement is the 

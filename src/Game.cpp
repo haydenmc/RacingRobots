@@ -122,6 +122,29 @@ void Game::GenerateNewLineup()
         this->robotLineup.push_back(shuffledRoster.at(i));
     }
 }
+
+void Game::CommitRaceResults(
+    std::vector<std::shared_ptr<Robot>> orderedFinisherListDesc)
+{
+    // Add a win to the winner's stats
+    if (orderedFinisherListDesc.size() > 0)
+    {
+        std::shared_ptr<Robot> winner = orderedFinisherListDesc.at(0);
+        winner->SetWins(winner->GetWins() + 1);
+    }
+    // Add a loss to everyone else's
+    for (unsigned int i = 1; i < orderedFinisherListDesc.size(); ++i)
+    {
+        auto loser = orderedFinisherListDesc.at(i);
+        loser->SetLosses(loser->GetLosses() + 1);
+    }
+    this->lastRaceFinisherList = orderedFinisherListDesc;
+}
+
+std::vector<std::shared_ptr<Robot>> Game::GetLastRaceResults()
+{
+    return this->lastRaceFinisherList;
+}
 #pragma endregion
 
 #pragma region Private Methods

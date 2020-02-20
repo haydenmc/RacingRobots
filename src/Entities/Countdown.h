@@ -6,20 +6,24 @@
 #include "SDL.h"
 
 /**
- * @brief The StartCountdown displays a simple 3, 2, 1, countdown sequence
+ * @brief The Countdown displays a simple second countdown sequence
  *        and then signals when it is finished.
  */
-class StartCountdown : IGameEntity
+class Countdown : IGameEntity
 {
 public:
     /* Events */
     Event<> Completed;
 
     /* Constructor/Destructor */
-    StartCountdown(SDL_Renderer* renderer, unsigned int totalSeconds);
+    Countdown(SDL_Renderer* renderer,
+        std::chrono::milliseconds durationMs,
+        unsigned short numDigits = 2,
+        unsigned short numDecimals = 0);
 
     /* Public methods */
     void Start();
+    void Stop();
     double GetX();
     double GetY();
     void SetX(double x);
@@ -32,10 +36,12 @@ public:
 private:
     SDL_Renderer* renderer;
     bool running = false;
-    unsigned int totalSeconds = 0;
-    unsigned int currentSecond = 0;
+    std::chrono::milliseconds durationMs;
+    unsigned short numDecimals;
     std::unique_ptr<Text> text;
     std::chrono::milliseconds elapsedTimeMs;
+    std::chrono::milliseconds remainingTimeMs;
     double x = 0.0;
     double y = 0.0;
+    std::wstring displayFormat;
 };

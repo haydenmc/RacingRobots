@@ -30,7 +30,7 @@
             "src/Scenes/Track.cpp",
             //    entities
             "src/Entities/Robot.cpp",
-            "src/Entities/StartCountdown.cpp",
+            "src/Entities/Countdown.cpp",
             "src/Entities/StatCard.cpp",
             // SDL libs
             "SDL2.lib",
