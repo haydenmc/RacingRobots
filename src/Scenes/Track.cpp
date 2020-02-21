@@ -173,16 +173,16 @@ void Track::EndRace()
     }
     this->endCountdown->Stop();
 
-    // Commit race results
+    // Commit race results and move to summary
     if (auto game = this->weakGame.lock())
     {
         game->CommitRaceResults(this->orderedFinisherListDesc);
+        game->ChangeScene(SceneId::Summary);
     }
     else
     {
         throw std::runtime_error("Track lost reference to Game object.");
     }
-    
 }
 
 bool Track::HasRobotFinished(const std::shared_ptr<Robot> robot)

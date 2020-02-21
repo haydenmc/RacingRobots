@@ -28,6 +28,7 @@
             "src/Scenes/Title.cpp",
             "src/Scenes/Lobby.cpp",
             "src/Scenes/Track.cpp",
+            "src/Scenes/Summary.cpp",
             //    entities
             "src/Entities/Robot.cpp",
             "src/Entities/Countdown.cpp",

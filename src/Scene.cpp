@@ -29,6 +29,14 @@ Scene::Scene(
 }
 #pragma endregion
 
+#pragma region Scene
+void Scene::Showing()
+{ }
+
+void Scene::Hidden()
+{ }
+#pragma endregion
+
 #pragma region IGameEntity
 void Scene::Draw()
 {

@@ -6,6 +6,12 @@ milestones I reach when I'm working on a project. So here's where I'll do that!
 I'm a little late in starting this, so the very beginning entries will be 
 missing. Maybe I'll backfill them later.
 
+## 20-02-20 / A very rudimentary summary screen
+
+Real quick I added a very rudimentary results screen that shows after the race.
+
+![Screenshot of the results screen](200220-summary.png)
+
 ## 20-02-19 / The finish line!
 
 Today I added a finish line to the race track, and logic to calculate placing 

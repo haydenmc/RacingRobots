@@ -4,6 +4,7 @@
 #include "Scenes/Title.h"
 #include "Scenes/Lobby.h"
 #include "Scenes/Track.h"
+#include "Scenes/Summary.h"
 #include "Text.h"
 
 #include <stdexcept>
@@ -141,7 +142,7 @@ void Game::CommitRaceResults(
     this->lastRaceFinisherList = orderedFinisherListDesc;
 }
 
-std::vector<std::shared_ptr<Robot>> Game::GetLastRaceResults()
+const std::vector<std::shared_ptr<Robot>>& Game::GetLastRaceResults()
 {
     return this->lastRaceFinisherList;
 }
@@ -241,6 +242,13 @@ void Game::initializeScenes()
 
     // Track scene
     this->scenes.insert_or_assign(SceneId::Track, std::make_shared<Track>
+    (
+        this->weak_from_this(),
+        SDL_Rect{0, 0, windowWidth, windowHeight}
+    ));
+
+    // Summary scene
+    this->scenes.insert_or_assign(SceneId::Summary, std::make_shared<Summary>
     (
         this->weak_from_this(),
         SDL_Rect{0, 0, windowWidth, windowHeight}

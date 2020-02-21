@@ -17,7 +17,8 @@ enum class SceneId
 {
     Title,
     Lobby,
-    Track
+    Track,
+    Summary
 };
 
 class Game : 
@@ -44,7 +45,7 @@ public:
     void GenerateNewLineup();
     void CommitRaceResults(
         std::vector<std::shared_ptr<Robot>> orderedFinisherListDesc);
-    std::vector<std::shared_ptr<Robot>> GetLastRaceResults();
+    const std::vector<std::shared_ptr<Robot>>& GetLastRaceResults();
 
 private:
     // Const values
